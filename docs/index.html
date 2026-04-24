@@ -6,8 +6,7 @@
 <title>换电站点布局分析报告</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://unpkg.com/heatmap.js@2.0.5/build/heatmap.min.js"></script>
-<script src="https://unpkg.com/leaflet-heatmap@1.0.0/leaflet-heatmap.js"></script>
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#f0f2f5;color:#222}
@@ -254,28 +253,25 @@ function flyToTier(name,tier){
 }
 
 function buildHeatData(points){
-  if(!points||points.length===0) return {data:[],max:1};
-  const maxCount=Math.max(...points.map(p=>p._count||1));
-  return {
-    max:maxCount,
-    data:points.map(p=>({
-      lat:p['纬度'],
-      lng:p['经度'],
-      value:p._count||1
-    }))
-  };
+  if(!points||points.length===0) return [];
+  return points.map(p=>[p['纬度'],p['经度'],p._count||1]);
 }
 
 function setHeatmap(type){
   document.querySelectorAll('.heatmap-btn').forEach(b=>b.classList.remove('active'));
   event.target.classList.add('active');
   if(!heatmapLayer) return;
+  map.removeLayer(heatmapLayer);
   let points=[];
   if(type==='all') points=DATA.gps_all||[];
   else if(type==='driving') points=DATA.gps_driving||[];
   else if(type==='parked') points=DATA.gps_parked||[];
   const hd=buildHeatData(points);
-  heatmapLayer.setData(hd);
+  heatmapLayer=L.heatLayer(hd,{
+    radius:25,blur:15,maxZoom:17,
+    max:Math.max(...hd.map(p=>p[2]),1),
+    gradient:{0.0:'#0000FF',0.25:'#00FFFF',0.45:'#00FF00',0.55:'#FFFF00',0.65:'#FF8000',0.85:'#FF0000',1.0:'#800000'}
+  }).addTo(map);
 }
 
 function initMap(){
@@ -284,30 +280,12 @@ function initMap(){
     attribution:'© 高德地图',maxZoom:18,opacity:.70
   }).addTo(map);
 
-  const cfg={
-    radius:25,
-    maxOpacity:0.8,
-    minOpacity:0.02,
-    scaleRadius:true,
-    useLocalExtrema:false,
-    latField:'lat',
-    lngField:'lng',
-    valueField:'value',
-    gradient:{
-      0.0:'#0000FF',
-      0.25:'#00FFFF',
-      0.45:'#00FF00',
-      0.55:'#FFFF00',
-      0.65:'#FF8000',
-      0.85:'#FF0000',
-      1.0:'#800000'
-    }
-  };
-  heatmapLayer=new HeatmapOverlay(cfg);
-  map.addLayer(heatmapLayer);
-
   const hd=buildHeatData(DATA.gps_all||[]);
-  heatmapLayer.setData(hd);
+  heatmapLayer=L.heatLayer(hd,{
+    radius:25,blur:15,maxZoom:17,
+    max:Math.max(...hd.map(p=>p[2]),1),
+    gradient:{0.0:'#0000FF',0.25:'#00FFFF',0.45:'#00FF00',0.55:'#FFFF00',0.65:'#FF8000',0.85:'#FF0000',1.0:'#800000'}
+  }).addTo(map);
 
   DATA.all_cabinets.forEach(c=>{
     const col=levelColor(c['等级']);
