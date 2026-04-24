@@ -269,7 +269,7 @@ function setHeatmap(type){
   const hd=buildHeatData(points);
   heatmapLayer=L.heatLayer(hd,{
     radius:25,blur:15,maxZoom:14,
-    max:Math.max(...hd.map(p=>p[2]),1)*0.3,
+    max:Math.max(...hd.map(p=>p[2]),1),
     gradient:{0.2:'#10b981',0.6:'#3b82f6',1.0:'#ef4444'}
   }).addTo(map);
   applyZoomRadius();
@@ -294,7 +294,7 @@ function initMap(){
   const hd=buildHeatData(DATA.gps_all||[]);
   heatmapLayer=L.heatLayer(hd,{
     radius:25,blur:15,maxZoom:14,
-    max:Math.max(...hd.map(p=>p[2]),1)*0.3,
+    max:Math.max(...hd.map(p=>p[2]),1),
     gradient:{0.2:'#10b981',0.6:'#3b82f6',1.0:'#ef4444'}
   }).addTo(map);
   applyZoomRadius();
