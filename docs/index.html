@@ -268,9 +268,9 @@ function setHeatmap(type){
   else if(type==='parked') points=DATA.gps_parked||[];
   const hd=buildHeatData(points);
   heatmapLayer=L.heatLayer(hd,{
-    radius:25,blur:15,maxZoom:17,
-    max:Math.max(...hd.map(p=>p[2]),1),
-    gradient:{0.0:'#0000FF',0.25:'#00FFFF',0.45:'#00FF00',0.55:'#FFFF00',0.65:'#FF8000',0.85:'#FF0000',1.0:'#800000'}
+    radius:35,blur:8,maxZoom:17,
+    max:Math.max(...hd.map(p=>p[2]),1)*0.4,
+    gradient:{0.0:'#0000FF',0.2:'#00FFFF',0.4:'#00FF00',0.5:'#FFFF00',0.7:'#FF4500',1.0:'#FF0000'}
   }).addTo(map);
 }
 
@@ -282,9 +282,9 @@ function initMap(){
 
   const hd=buildHeatData(DATA.gps_all||[]);
   heatmapLayer=L.heatLayer(hd,{
-    radius:25,blur:15,maxZoom:17,
-    max:Math.max(...hd.map(p=>p[2]),1),
-    gradient:{0.0:'#0000FF',0.25:'#00FFFF',0.45:'#00FF00',0.55:'#FFFF00',0.65:'#FF8000',0.85:'#FF0000',1.0:'#800000'}
+    radius:35,blur:8,maxZoom:17,
+    max:Math.max(...hd.map(p=>p[2]),1)*0.4,
+    gradient:{0.0:'#0000FF',0.2:'#00FFFF',0.4:'#00FF00',0.5:'#FFFF00',0.7:'#FF4500',1.0:'#FF0000'}
   }).addTo(map);
 
   DATA.all_cabinets.forEach(c=>{
