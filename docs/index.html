@@ -83,6 +83,7 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
     <h1>换电站点布局分析报告</h1>
     <div style="display:flex;gap:16px;margin-top:6px;font-size:12px;color:rgba(255,255,255,.8)">
       <span>可布局场站：<b id="s1" style="color:#fff">—</b></span>
+      <span>已选站点：<b id="s5" style="color:#fff">—</b></span>
       <span>推荐站点：<b id="s2" style="color:#fff">—</b></span>
       <span>其他站点：<b id="s3" style="color:#fff">—</b></span>
       <span>现有电柜：<b id="s4" style="color:#fff">—</b></span>
@@ -422,9 +423,14 @@ function highlightStationCard(stationName){
 // ========== 更新顶部统计卡片 ==========
 function updateStats(){
   if(!DATA) return;
-  document.getElementById('s1').textContent=DATA.summary.total_stations;
-  document.getElementById('s2').textContent=DATA.summary.recommended_count||0;
-  document.getElementById('s3').textContent=DATA.summary.other_count||0;
+  const allStations=DATA.all_stations||[];
+  const newSites=DATA.all_new_sites||[];
+  document.getElementById('s1').textContent=allStations.length;
+  const selected=allStations.filter(s=>s['是否选择']==='已选').length;
+  document.getElementById('s5').textContent=selected;
+  const rec=allStations.filter(s=>s['是否选择']==='已选'||(s['综合分']||0)>0).length+newSites.filter(s=>(s['综合分']||0)>0).length;
+  document.getElementById('s2').textContent=rec;
+  document.getElementById('s3').textContent=allStations.length-rec;
   document.getElementById('s4').textContent=DATA.summary.total_cabinets;
 }
 
