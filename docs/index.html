@@ -93,13 +93,13 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
     <a class="btn-clear" href="algorithm.html" style="display:inline-block;text-decoration:none">📐 算法说明</a>
     <div class="slider-group">
       <label>底图透明度</label>
-      <input type="range" id="mapOpacitySlider" min="0" max="100" value="100" oninput="setMapOpacity(this.value)">
-      <span class="slider-val" id="mapOpacityVal">100%</span>
+      <input type="range" id="mapOpacitySlider" min="0" max="100" value="60" oninput="setMapOpacity(this.value)">
+      <span class="slider-val" id="mapOpacityVal">60%</span>
     </div>
     <div class="slider-group">
       <label>饱和度</label>
-      <input type="range" id="mapSaturationSlider" min="0" max="100" value="100" oninput="setMapSaturation(this.value)">
-      <span class="slider-val" id="mapSaturationVal">100%</span>
+      <input type="range" id="mapSaturationSlider" min="0" max="100" value="60" oninput="setMapSaturation(this.value)">
+      <span class="slider-val" id="mapSaturationVal">60%</span>
     </div>
     <div class="heatmap-type-bar" id="heatmapTypeBar">
       <button class="heatmap-type-btn active" onclick="setHeatmap('all')" data-type="all">总体热力</button>
@@ -167,8 +167,8 @@ let selectedStation = null;                      // 当前选中的场站
 let stationClickBound = false;                   // 场站点击事件是否已绑定
 let cabinetClickBound = false;                   // 电柜点击事件是否已绑定
 let heatmapVisible = true;                       // 热力图是否可见
-let mapOpacity = 100;                            // 底图透明度
-let mapSaturation = 100;                         // 底图饱和度
+let mapOpacity = 60;                             // 底图透明度
+let mapSaturation = 60;                          // 底图饱和度
 
 // ========== 底图透明度调节 ==========
 function setMapOpacity(val){
@@ -774,7 +774,7 @@ function initMap(){
           id:'gaode-layer',
           type:'raster',
           source:'gaode-tiles',
-          paint:{'raster-opacity':1}
+          paint:{'raster-opacity':0.6,'raster-saturation':-0.4}
         }
       ]
     },
